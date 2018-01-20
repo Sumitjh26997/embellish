@@ -15,7 +15,7 @@ use yii\helpers\Html;
 
       gtag('config', 'UA-111700045-1');
     </script>
-
+    <meta name="">
     <meta charset="utf-8">
     <meta name="title" content="Embellish">
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
@@ -28,7 +28,7 @@ use yii\helpers\Html;
     <meta name="publisher" content="www.embellish.store">
     <meta name="copyright" content="www.embellish.store">
     <meta name="revisit-after" content="2 days">
-    <link rel="shortcut icon" href="assets/img/fav.png">
+    <link rel="shortcut icon" href="E.png">
 
     <title>Embellish | Click It, Rent It, Prop It!</title>
     <!--[if lt IE 9]>
@@ -50,7 +50,7 @@ use yii\helpers\Html;
                     <div class="col-sm-6">
                         <div class="contactinfo">
                             <ul class="nav nav-pills">
-                                <li><a href=""><i class="fa fa-phone"></i> +2 95 01 88 821</a></li>
+                                <li><a href="tel:8446972394"><i class="fa fa-phone"></i> +91 8446972394</a></li>
                                 <li><a href="mailto:kanchan@embellish.store"><i class="fa fa-envelope"></i> kanchan@embellish.store</a></li>
                                 <li><a href="">|</a></li>
 
@@ -130,10 +130,10 @@ use yii\helpers\Html;
                         </div>
                         <div class="mainmenu pull-left">
                              <ul class="nav navbar-nav collapse navbar-collapse">
-                                <li><a href="<?=Url::to(['/site'])?>" class="active">Home</a></li>
+                                <li><a href="<?=Url::to(['/'])?>" class="active">Home</a></li>
                                 <li class="dropdown"><a href="#">Shop<i class="fa fa-angle-down"></i></a>
                                     <ul role="menu" class="sub-menu">
-                                        <li><a href="<?=Url::to(['/site/decor'])?>">Decor</a></li>
+                                        <li><a href="<?=Url::to(['/site/category','cat'=> 'Decor'])?>">Decor</a></li>
                                         <li><a href="#">Furniture</a></li> 
                                         <li><a href="#">Art</a></li> 
                                         <li><a href="#">Exclusives</a></li> 

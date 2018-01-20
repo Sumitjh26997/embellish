@@ -32,6 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'order_id',
             'item_id',
             'qty_per_item',
+            'current_price',
         ],
     ]) ?>
 

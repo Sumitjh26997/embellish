@@ -10,8 +10,8 @@ use common\models\User;
  */
 class ResetPasswordForm extends Model
 {
-    public $password;
-
+    public $password
+    public $confirm
     /**
      * @var \common\models\User
      */
@@ -45,7 +45,21 @@ class ResetPasswordForm extends Model
         return [
             ['password', 'required'],
             ['password', 'string', 'min' => 6],
+
+            ['confirm', 'required'],
+            ['confirm', 'string', 'min' => 6],
+            ['confirm','passvalidate'],
+
         ];
+    }
+
+    public function passvalidate()
+    {
+        if($this->password != $this->confirm)
+        {
+            $this->addError('password','Passwords do not match');
+            $this->addError('confirm','Passwords do not match');
+        }
     }
 
     /**

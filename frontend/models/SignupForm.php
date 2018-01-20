@@ -12,7 +12,10 @@ class SignupForm extends Model
     public $username;
     public $email;
     public $password;
-
+    public $phone;
+    public $address;
+    public $company;
+    public $confirm;
 
     /**
      * @inheritdoc
@@ -34,7 +37,29 @@ class SignupForm extends Model
             ['password', 'required'],
             ['password', 'string', 'min' => 6],
 
+            ['phone','required'],
+            ['phone','integer'],
+            ['phone','string','min'=>10,'max'=>10],
+
+            ['address', 'required'],
+            ['address', 'string', 'max' => 255],
+
+            ['company', 'required'],
+            ['company', 'string', 'max' => 255],
+
+            ['confirm', 'required'],
+            ['confirm', 'string', 'min' => 6],
+            ['confirm','passvalidate'],
         ];
+    }
+
+    public function passvalidate()
+    {
+        if($this->password != $this->confirm)
+        {
+            $this->addError('password','Passwords do not match');
+            $this->addError('confirm','Passwords do not match');
+        }
     }
 
     /**
@@ -53,6 +78,9 @@ class SignupForm extends Model
         $user->email = $this->email;
         $user->setPassword($this->password);
         $user->generateAuthKey();
+        $user->phone = $this->phone;
+        $user->address = $this->address;
+        $user->company = $this->company;
         $user->status = 0;
         return $user->save() ? $user : null;
     }

@@ -18,6 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::a('Create Order Item', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
+
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -28,6 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'order_id',
             'item_id',
             'qty_per_item',
+            'current_price',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

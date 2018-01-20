@@ -22,7 +22,7 @@ $this->title = 'Login';
             <div class="login-form">
             <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
 
-                <?= $form->field($model, 'username')->textInput(['placeholder'=>'UserName','autofocus' => true]) ?>
+                <?= $form->field($model, 'email')->textInput(['placeholder'=>'Email-ID','autofocus' => true]) ?>
 
                 <?= $form->field($model, 'password')->passwordInput(['placeholder'=>'Password']) ?>
 

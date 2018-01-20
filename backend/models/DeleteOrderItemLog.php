@@ -11,6 +11,7 @@ use Yii;
  * @property int $order_id
  * @property int $item_id
  * @property int $qty_per_item
+ * @property int $current_price
  */
 class DeleteOrderItemLog extends \yii\db\ActiveRecord
 {
@@ -28,7 +29,7 @@ class DeleteOrderItemLog extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['order_id', 'item_id', 'qty_per_item'], 'integer'],
+            [['order_id', 'item_id', 'qty_per_item', 'current_price'], 'integer'],
         ];
     }
 
@@ -42,6 +43,7 @@ class DeleteOrderItemLog extends \yii\db\ActiveRecord
             'order_id' => 'Order ID',
             'item_id' => 'Item ID',
             'qty_per_item' => 'Qty Per Item',
+            'current_price' => 'Current Price',
         ];
     }
 }

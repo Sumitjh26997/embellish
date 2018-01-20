@@ -145,49 +145,37 @@ use yii\helpers\Url;
                             </div> -->
                             <div class="panel panel-default">
                                 <div class="panel-heading">
-                                    <h4 class="panel-title"><a href="<?=Url::to(['/site/decor'])?>">Decor</a></h4>
+                                    <h4 class="panel-title"><a href="<?=Url::to(['/site/category','cat'=> 'Decor'])?>">Decor</a></h4>
                                 </div>
                             </div>
                             <div class="panel panel-default">
                                 <div class="panel-heading">
-                                    <h4 class="panel-title"><a href="#">Furniture</a></h4>
+                                    <h4 class="panel-title"><a href="<?=Url::to(['/site/category','cat'=> 'Furniture'])?>">Furniture</a></h4>
                                 </div>
                             </div>
                             <div class="panel panel-default">
                                 <div class="panel-heading">
-                                    <h4 class="panel-title"><a href="#">Art</a></h4>
+                                    <h4 class="panel-title"><a href="<?=Url::to(['/site/category','cat'=> 'Art'])?>">Art</a></h4>
                                 </div>
                             </div>
                             <div class="panel panel-default">
                                 <div class="panel-heading">
-                                    <h4 class="panel-title"><a href="#">Interiors</a></h4>
+                                    <h4 class="panel-title"><a href="<?=Url::to(['/site/category','cat'=> 'Interior'])?>">Interiors</a></h4>
                                 </div>
                             </div>
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <h4 class="panel-title"><a href="#">Clothing</a></h4>
-                                </div>
-                            </div>
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <h4 class="panel-title"><a href="#">Bags</a></h4>
-                                </div>
-                            </div>
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <h4 class="panel-title"><a href="#">Shoes</a></h4>
-                                </div>
-                            </div>
+                            
                         </div><!--/category-products-->
                     
                         
                     
                     </div>
                 </div>
+
+                <!-- add filters here -->
                 
                 <div class="col-sm-9 padding-right">
                     <div class="features_items"><!--features_items-->
-                        <h2 class="title text-center">Features Items</h2>
+                        <h2 class="title text-center">Featured Items</h2>
                         
                       
                 

@@ -10,7 +10,7 @@ $this->params['breadcrumbs'][] = ['label' => 'Delete Order Item Logs', 'url' => 
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';
 ?>
-<!-- <div class="delete-order-item-log-update">
+<div class="delete-order-item-log-update">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
@@ -18,4 +18,4 @@ $this->params['breadcrumbs'][] = 'Update';
         'model' => $model,
     ]) ?>
 
-</div> -->
+</div>

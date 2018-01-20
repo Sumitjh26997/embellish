@@ -15,6 +15,10 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
+    <p>
+        <?= Html::a('Create Delete Order Item Log', ['create'], ['class' => 'btn btn-success']) ?>
+    </p>
+
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -25,6 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'order_id',
             'item_id',
             'qty_per_item',
+            'current_price',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

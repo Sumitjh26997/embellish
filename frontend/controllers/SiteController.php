@@ -13,6 +13,7 @@ use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
 use backend\models\Item;
+//use backend\models\Image;
 use yii\data\ActiveDataProvider;
 use yii\helpers\Html;
 /*use backend\models\User;*/
@@ -26,7 +27,7 @@ class SiteController extends Controller
     /**
      * @inheritdoc
      */
-     public $enableCsrfValidation=false;
+    public $enableCsrfValidation=false;
     public function behaviors()
     {
         return [
@@ -187,12 +188,26 @@ class SiteController extends Controller
 
     }
 
-    public function actionDecor()
+    public function actionCategory($cat)
     {
-        $decors = Item::find()->where(['type'=>'decor'])->all();
-        $decorimages = Image::find()->where(['in','item_id',$decors])->distinct()->all();
+        $category = Item::find()->where(['type'=>$cat])->all();
+        $categoryimages = Image::find()->where(['in','item_id',$category])->distinct()->all();
 
-        return $this->render('decor',['decors'=>$decors,'decorimages' => $decorimages]);
+        return $this->render('category',['cat' => $cat,'category'=>$category,'categoryimages' => $categoryimages]);
+    }
+
+    public function actionProduct($id)
+    {
+        $item = Item::findOne($id);
+        $itemimages=Image::find()->where(['item_id'=>$id])->all();
+        /*$items = new ActiveDataProvider([
+        'query'=> Item::find(),
+        'pagination'=>['pageSize' => 3,
+        ],
+    ]);*/
+
+        return $this->render('product',['item'=>$item,'itemimages'=>$itemimages]);
+
     }
 
     public function actionLogin()
@@ -272,13 +287,14 @@ class SiteController extends Controller
         $model = new SignupForm();
         if ($model->load(Yii::$app->request->post())) {
             if ($user = $model->signup()) {
+                $link=Yii::$app->urlManager->createAbsoluteUrl(['/site/confirm','key'=>$user->auth_key]);
                 $email = \Yii::$app->mailer->compose()
                 ->setTo($user->email)
                 ->setFrom('sneha@embellish.store')
                 ->setSubject('Signup Confirmation')
-                ->setTextBody("Click this link ".\yii\helpers\Html::a('confirm',Yii::$app->urlManager->createAbsoluteUrl(['/site/confirm','key'=>$user->auth_key])))->send();
+                ->setTextBody("Click this link to verify your account.\r \n ".Html::encode($link))->send();
                 if($email){
-                    Yii::$app->getSession()->setFlash('success','Check Your E-mail!');
+                    Yii::$app->getSession()->setFlash('success','Check Your e-mail for further instructions');
                 }
                 else{
                     Yii::$app->getSession()->setFlash('warning','Failed, contact Admin!');
@@ -302,10 +318,10 @@ class SiteController extends Controller
         if(!empty($user)){
             $user->status = 10;
             $user->save();
-            Yii::$app->getSession()->setFlash('success','Success!');
+            Yii::$app->getSession()->setFlash('success','Success! You can now login.');
         }
         else{
-            Yii::$app->getSession()->setFlash('warning','Failed!');   
+            Yii::$app->getSession()->setFlash('warning','Verification failed!');   
         }
 
         return $this->goHome();

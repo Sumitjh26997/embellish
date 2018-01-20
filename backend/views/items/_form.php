@@ -38,7 +38,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'file')->fileInput() ?>
 
-    <?= $form->field($model, 'featured')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'featured')->radioList(array('Yes' => 'Yes', 'No' => 'No')) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

@@ -18,7 +18,7 @@ class DeleteOrderItemLogSearch extends DeleteOrderItemLog
     public function rules()
     {
         return [
-            [['id', 'order_id', 'item_id', 'qty_per_item'], 'integer'],
+            [['id', 'order_id', 'item_id', 'qty_per_item', 'current_price'], 'integer'],
         ];
     }
 
@@ -62,6 +62,7 @@ class DeleteOrderItemLogSearch extends DeleteOrderItemLog
             'order_id' => $this->order_id,
             'item_id' => $this->item_id,
             'qty_per_item' => $this->qty_per_item,
+            'current_price' => $this->current_price,
         ]);
 
         return $dataProvider;
