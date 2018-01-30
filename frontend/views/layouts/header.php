@@ -15,6 +15,11 @@ use yii\helpers\Html;
 
       gtag('config', 'UA-111700045-1');
     </script>
+    <meta name="theme-color" content="#331a00">
+    <!-- Windows Phone -->
+    <meta name="msapplication-navbutton-color" content="#331a00">   
+    <!-- iOS Safari -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="#331a00">
     <meta name="">
     <meta charset="utf-8">
     <meta name="title" content="Embellish">
@@ -28,14 +33,14 @@ use yii\helpers\Html;
     <meta name="publisher" content="www.embellish.store">
     <meta name="copyright" content="www.embellish.store">
     <meta name="revisit-after" content="2 days">
-    <link rel="shortcut icon" href="E.png">
+   
 
     <title>Embellish | Click It, Rent It, Prop It!</title>
     <!--[if lt IE 9]>
     <script src="js/html5shiv.js"></script>
     <script src="js/respond.min.js"></script>
-    <![endif]-->       
-    <link rel="shortcut icon" href="E.png">
+    <![endif]-->   
+     <link rel="shortcut icon" href="E.png">    
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="images/ico/apple-touch-icon-144-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="images/ico/apple-touch-icon-114-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="images/ico/apple-touch-icon-72-precomposed.png">
@@ -151,12 +156,44 @@ use yii\helpers\Html;
 
                     </div>
                     </div>
-                    <!-- <div class="col-sm-3">
-                        <div class="search_box pull-right">
-                            <input type="text" placeholder="Search"/>
+                    <div class="col-sm-3">
+                        <div class="search_box pull-right" >
+                            <input id="searchkey" type="text" placeholder="Search" onkeyup="search();" />
+                            <div class="search_box" id="suggesstion-box" style="cursor: pointer;"></div>
                         </div>
-                    </div> -->
+                    </div>
                 </div>
             </div>
         </div><!--/header-bottom-->
     </header><!--/header-->
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript">
+    function search(){
+            //
+            //alert("in function")
+        //alert(document.getElementById('search').value);
+        
+        //var keyword=$('#searchkey').val();
+        //alert(keyword);
+        if($('#searchkey').val()!="")
+        {
+        $.get( '<?= Url::toRoute('site/search')?>',{'keyword':$('#searchkey').val()})
+        .done(function(data){
+            $('#suggesstion-box').html(data);
+            //alert("success");
+        }) 
+        .fail(function() {
+        alert( "error" );
+        });
+        }
+        else
+        {
+            $('#suggesstion-box').html("");
+        }
+    }
+
+/*function selectItem(val) {
+$("#search").val(val);
+$("#suggesstion-box").hide();
+}*/
+</script>

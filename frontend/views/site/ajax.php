@@ -1,37 +1,43 @@
-<?php
-include"conf.php"
+<?php 
+$con = mysqli_connect('localhost','root','12345');											//code for database connectivity
+if(!$con) echo 'cannot connect';
+if(!mysqli_select_db($con,'embellish_props'))															//code for selecting database		
+	echo 'cannot connect';
 
-$color = "";
-$material = "";
-$colour = isset($_REQUEST['color'])?$_REQUEST['color']:"";
+/*$color = "";
+$material = "";*/
+$color = isset($_REQUEST['color'])?$_REQUEST['color']:"";
 $material = isset($_REQUEST['material'])?$_REQUEST['material']:"";
 $cat = $_POST['cat'];
 
-$query = "SELECT * FROM item where category = '$cat'";
+$query = "SELECT * FROM item where type = '$cat'";
 	if(!empty($color)){
 		$colordata =implode("','",$color);
 	    $query  .= "AND color in('$colordata')"; 
 	}
 					  
-	if(!empty($brand)){
+	if(!empty($material)){
 		$materialdata =implode("','",$material);
 		$query  .= " AND material in('$materialdata')"; 
 	}
 
-	$result = mysqli_query($con,$query) or die("Error : ".mysql_error());
+	$result = mysqli_query($con,$query) or die("Error : ".mysqli_errno($con));
+	?>
+
+	<h2 class="title text-center"><input type="text" id="cat" value="<?= $cat ?>" style="display: none;" ><?= $cat ?> Items</h2>
+
+	<?php
 
 	while($category = mysqli_fetch_assoc($result)){
 ?>
-<div id="product-data">
 	<div class="col-sm-4">
 							<div class="product-image-wrapper">
 								<div class="single-products">
 										<div class="productinfo text-center">
-											<!-- <img src="images/product-details/<?php echo $category->image?>" alt="photo" /> -->
-											
-											<h2>&#8377;<?=$category->rent_per_day?></h2>
-											<p><?=$category->name?></p>									
-											<a href="<?=Url::to(['/site/product','id'=>$category->item_id])?>" class="btn btn-default product-details"><i class="fa fa-search"></i>View Details</a>
+											<img src="images/product-details/<?php echo $category['image']?>" alt="photo" />
+											<h2>&#8377;<?=$category['rent_per_day']?></h2>
+											<p><?=$category['name']?></p>									
+											<a href="http://localhost/yii2_advanced/product?id=category['item_id']" class="btn btn-default product-details"><i class="fa fa-search"></i>View Details</a>
 											
 										</div>
 
@@ -39,7 +45,8 @@ $query = "SELECT * FROM item where category = '$cat'";
                                         <div class="overlay-content">
                                             <h2></h2>
                                             <p></p>
-                                            <a href="<?=Url::to(['/site/product','id'=>$category->item_id])?>" class="btn btn-default product-details"><i class="fa fa-search"></i>View Details</a>
+
+                                            <a href="http://localhost/yii2_advanced/product?id=category['item_id']" class="btn btn-default product-details"><i class="fa fa-search"></i>View Details</a>
                                         </div>
                                     </div>
 										
@@ -47,5 +54,5 @@ $query = "SELECT * FROM item where category = '$cat'";
 								
 							</div>
 						</div>
-</div>
-	<?php }?>
+		
+<?php } ?>

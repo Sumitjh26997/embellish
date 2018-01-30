@@ -1,6 +1,5 @@
 <?php
 use yii\helpers\Url;
-include"conf.php"
 ?>
 <div class="container">
 			<div class="row">
@@ -21,14 +20,9 @@ include"conf.php"
                                 <div id="color" class="panel-collapse collapse">
                                     <div class="panel-body">
                                         <ul>
-                                        	<?php
-												$query = "select distinct(color) from item ";
-												$rs = mysqli_query($con,$query) or die("Error : ".mysql_error());
-												while($color_data = mysqli_fetch_assoc($rs)){ 
-											?>
                                             <li><!-- <a href="#">Nike </a> -->
-                                            <input type="checkbox" onclick="filter();" class="item_filter color" value="<?php echo $color_data['color']; ?>">&nbsp;&nbsp; <?php echo $color_data['color']; ?></a>
-											<?php } ?>
+                                            <input type="checkbox" onclick="filter();" class="item_filter color" value="">&nbsp;&nbsp; </a>
+											
                                             </li>
                                         </ul>
                                     </div>
@@ -47,14 +41,8 @@ include"conf.php"
                                 <div id="material" class="panel-collapse collapse">
                                     <div class="panel-body">
                                         <ul>
-                                            <?php
-												$query = "select distinct(material) from item ";
-												$rs = mysqli_query($con,$query) or die("Error : ".mysql_error());
-												while($material_data = mysqli_fetch_assoc($rs)){ 
-											?>	
                                             <li><!-- <a href="#">Nike </a> -->
-                                            <input type="checkbox" onclick="filter();" class="item_filter material" value="<?php echo $material_data['material']; ?>">&nbsp;&nbsp; <?php echo $material_data['material']; ?></a>
-											<?php } ?>
+                                            <input type="checkbox" onclick="filter();" class="item_filter material" value="">&nbsp;&nbsp; </a>
                                             </li>
                                         </ul>
                                     </div>
@@ -67,7 +55,7 @@ include"conf.php"
 
 				
 				<!--all images of decor from itemimage table-->
-				<div class='col-sm-9'>
+				<div class='col-sm-9' id="product-data">
 					<h2 class="title text-center"><input type="text" id="cat" value="<?= $cat ?>" style="display: none;" ><?= $cat ?> Items</h2>
 						<?php foreach(array_keys($category) as $i ) {
 
@@ -129,17 +117,22 @@ include"conf.php"
 
 
 		$.ajax({
-			url:"ajax.php",
+			url:"frontend/views/site/ajax.php",
 			type:"post",
 			data:{
-				
+				color:color,
+				material:material,
 				cat:cat
 			},
 			cache:false,
-			success:function(html){
-				//$('#product-data').html(result);
-				alert(html);	
-			}
+			success:function(result){
+				document.getElementById('product-data').innerHTML="";
+				$('#product-data').html(result);
+				//alert(html);	
+			},
+			error: function(jqxhr, status, exception) {
+             alert('Exception:', exception);
+         }
 		});
 	}
 </script>	

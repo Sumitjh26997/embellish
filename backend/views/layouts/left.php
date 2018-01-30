@@ -27,7 +27,7 @@
                         'label' => 'Admin',
                         'icon' => 'circle-o text-purple',
                         'url' => '#',
-                        'visible' => Yii::$app->user->identity->username == 'root-admin' || Yii::$app->user->identity->username == 'Sneha Hotchandani',
+                        'visible' => Yii::$app->user->identity->username == 'root-kanchan' || Yii::$app->user->identity->username == 'root-sneha'|| Yii::$app->user->identity->username == 'root-super',
                         'items' => [
                             ['label' => 'Active employees', 'icon' => 'circle-o', 'url' => ['/admin/index'],],
                             ['label' => 'Deleted employees', 'icon' => 'circle-o', 'url' => ['/image/index'],],

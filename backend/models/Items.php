@@ -54,12 +54,32 @@ class Items extends \yii\db\ActiveRecord
             [['image'], 'string', 'max' => 255],
             [['featured'], 'string', 'max' => 3],
             [['file'],'file'],
+            /*['qty_on_order','validate'],
+            ['qty_left','validateq'],*/
         ];
     }
 
     /**
      * @inheritdoc
      */
+    /*public function validateqo()
+    {
+        if($this->qty_on_order > $this->quantity)
+        {
+            $this->addError('quantity','Quantity should not be less than quantity on order');
+            $this->addError('qty_on_order','Quantity should not be less than quantity on order');
+        }
+    }
+
+    public function validateq()
+    {
+        if($this->qty_on_order > $this->qty_left)
+        {
+            $this->addError('qty_left','Quantity Left should not be less than quantity on order');
+            $this->addError('qty_on_order','Quantity Left should not be less than quantity on order');
+        }   
+    }
+*/
     public function attributeLabels()
     {
         return [

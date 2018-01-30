@@ -19,6 +19,7 @@ use yii\helpers\Html;
 /*use backend\models\User;*/
 
 use backend\models\Image;
+use backend\models\Items;
 /**
  * Site controller
  */
@@ -190,7 +191,7 @@ class SiteController extends Controller
 
     public function actionCategory($cat)
     {
-        $category = Item::find()->where(['type'=>$cat])->all();
+        $category = Items::find()->where(['type'=>$cat])->all();
         $categoryimages = Image::find()->where(['in','item_id',$category])->distinct()->all();
 
         return $this->render('category',['cat' => $cat,'category'=>$category,'categoryimages' => $categoryimages]);
@@ -198,7 +199,7 @@ class SiteController extends Controller
 
     public function actionProduct($id)
     {
-        $item = Item::findOne($id);
+        $item = Items::findOne($id);
         $itemimages=Image::find()->where(['item_id'=>$id])->all();
         /*$items = new ActiveDataProvider([
         'query'=> Item::find(),
@@ -235,6 +236,19 @@ class SiteController extends Controller
     public function actionPrint()
     {
         return $this->render('print');
+    }
+
+    public function actionSearch($keyword)
+    {
+        
+        //$keyword=$_POST['keyword'];
+
+        //echo $keyword;
+        //$key=$keyword;
+       $search = Items::find()->orWhere(['like','name',$keyword])->orWhere(['like','color',$keyword])->orWhere(['like','material',$keyword])->orWhere(['like','description',$keyword])->limit(6)->all();
+       //$search = Items::findBySql("SELECT * FROM item WHERE name LIKE '%".$keyword."%'");
+       //print_r($search);
+        return $this->renderPartial('search',['keyword'=>$keyword,'result'=>$search]);
     }
 
     public function actionLogout()
