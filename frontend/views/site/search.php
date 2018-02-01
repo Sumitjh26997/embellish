@@ -10,7 +10,7 @@ use yii\helpers\Html;
 if(!empty($result))
 {
 ?>
-<ul id="search-list">
+<ul>
 <?php
 foreach($result as $item) {
 ?>

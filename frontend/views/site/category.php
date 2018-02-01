@@ -20,10 +20,14 @@ use yii\helpers\Url;
                                 <div id="color" class="panel-collapse collapse">
                                     <div class="panel-body">
                                         <ul>
-                                            <li><!-- <a href="#">Nike </a> -->
-                                            <input type="checkbox" onclick="filter();" class="item_filter color" value="">&nbsp;&nbsp; </a>
-											
-                                            </li>
+                                        	<?php
+                                        	foreach($color as $c)
+                                        	{                                        		
+                                            ?>
+                                            <li>
+                                            <input type="checkbox" onclick="filter();" class="item_filter color" value="<?php echo $c['color']?>">&nbsp;&nbsp; <?php echo $c['color']?></a>
+											</li>
+											<?php }?>
                                         </ul>
                                     </div>
                                 </div>
@@ -41,9 +45,14 @@ use yii\helpers\Url;
                                 <div id="material" class="panel-collapse collapse">
                                     <div class="panel-body">
                                         <ul>
-                                            <li><!-- <a href="#">Nike </a> -->
-                                            <input type="checkbox" onclick="filter();" class="item_filter material" value="">&nbsp;&nbsp; </a>
-                                            </li>
+                                        	<?php
+                                        	foreach($material as $m)
+                                        	{                                        		
+                                            ?>
+                                            <li>
+                                            <input type="checkbox" onclick="filter();" class="item_filter color" value="<?php echo $m['material']?>">&nbsp;&nbsp; <?php echo $m['material']?></a>
+											</li>
+											<?php }?>
                                         </ul>
                                     </div>
                                 </div>
@@ -113,26 +122,16 @@ use yii\helpers\Url;
 	function filter(){
 		color = multiple_values("color");
 		material = multiple_values("material");
-		cat = document.getElementById("cat").value;
+		cat = $("#cat").val();
 
 
-		$.ajax({
-			url:"frontend/views/site/ajax.php",
-			type:"post",
-			data:{
-				color:color,
-				material:material,
-				cat:cat
-			},
-			cache:false,
-			success:function(result){
-				document.getElementById('product-data').innerHTML="";
-				$('#product-data').html(result);
-				//alert(html);	
-			},
-			error: function(jqxhr, status, exception) {
-             alert('Exception:', exception);
-         }
-		});
+		$.get("<?= Url::to(['site/category']) ?>",{'cat':cat})
+		.done(function(data){
+            $('#container').html(data);
+            //alert("success");
+        }) 
+        .fail(function() {
+        alert( "error" );
+        });
 	}
 </script>	

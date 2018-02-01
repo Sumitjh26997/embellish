@@ -193,8 +193,11 @@ class SiteController extends Controller
     {
         $category = Items::find()->where(['type'=>$cat])->all();
         $categoryimages = Image::find()->where(['in','item_id',$category])->distinct()->all();
+        $color = Items::find()->select(['color'])->distinct()->all();
+        $material = Items::find()->select(['material'])->distinct()->all();
+        //print_r($color);
 
-        return $this->render('category',['cat' => $cat,'category'=>$category,'categoryimages' => $categoryimages]);
+        return $this->render('category',['cat' => $cat,'category'=>$category,'categoryimages' => $categoryimages,'color'=>$color,'material'=>$material]);
     }
 
     public function actionProduct($id)
@@ -240,14 +243,7 @@ class SiteController extends Controller
 
     public function actionSearch($keyword)
     {
-        
-        //$keyword=$_POST['keyword'];
-
-        //echo $keyword;
-        //$key=$keyword;
        $search = Items::find()->orWhere(['like','name',$keyword])->orWhere(['like','color',$keyword])->orWhere(['like','material',$keyword])->orWhere(['like','description',$keyword])->limit(6)->all();
-       //$search = Items::findBySql("SELECT * FROM item WHERE name LIKE '%".$keyword."%'");
-       //print_r($search);
         return $this->renderPartial('search',['keyword'=>$keyword,'result'=>$search]);
     }
 
