@@ -1,23 +1,26 @@
 <?php
 use yii\helpers\Html;
 use yii\helpers\Url;
+use backend\models\Item;
 ?>
 <section id="cart_items">
 		<div class="container">
 			
-
-			
-			<div class="review-payment">
-				<h2>Review & Payment</h2>
-			</div>
-			<?php
-							  if(empty($var))
+					<?php
+							  if(empty($vars))
         		 				{
         							echo Html::tag('p','Your Cart is Empty !',['class'=>'alert alert-danger']);
         							/*return $this->render('/site/cart.php',['var'=>var]);*/
+        							echo Html::img('images/cart/emptycart.png',['class'=>'center-block']);
+
             
         						}
-						?>
+						else { ?>
+			
+			<div class="review-payment">
+				<h2>Review Your Order</h2>
+			</div>
+			
 			<div class="table-responsive cart_info">
 
 				<table class="table table-condensed">
@@ -25,61 +28,61 @@ use yii\helpers\Url;
 						<tr class="cart_menu">
 							<td class="image">Item</td>
 							<td class="description"></td>
-							<td class="rent per day">Price</td>
+							
 							<td class="quantity">Quantity</td>
-							<td class="total">Total</td>
+							<td class="price">Price</td>
 							<td></td>
 						</tr>
 					</thead>
 					<tbody>
 						
 						
-						<?php foreach(array_keys($var) as $i) {?>
+						<?php $total=0; foreach(array_keys($vars) as $i) {
+							$cart=Item::find()->where(['item_id'=>$i])->One();
+							?>
 						<tr>
 							<td class="cart_product">
-								<a href=""><img src="images/product-details/<?php echo $cartimages[$i]->image ?>" height="50px" width="100px" alt="photo" /></a>
+								<a href=""><img src="images/product-details/<?php echo $cart->image ?>" height="50px" width="50px" alt="photo" /></a>
 							</td>
-							<td class="cart_description">
-								<h4><a href=""><?=$var[$i]->name?></a></h4>
-								<p>Web ID: <?=$var[$i]->item_id?></p>
+							<td class="cart_description" style="padding-left: 6%">
+								<h4><a href=""><?=$cart->name?></a></h4>
+								<p>Web ID: <?=$cart->item_id?></p>
 							</td>
-							<td class="cart_price">
-								<p> <?=$var[$i]->rent_per_day?></p>
-							</td>
+							
 							<td class="cart_quantity">
 								<div class="cart_quantity_button">
-									<a class="cart_quantity_up" href=""> + </a>
-									<input class="cart_quantity_input" type="text" name="quantity" value="1" autocomplete="off" size="2">
-									<a class="cart_quantity_down" href=""> - </a>
+								
+									<input style="background:white;border:none;" class="cart_quantity_input" type="text" name="quantity" 
+									value="<?=$vars[$i]['quantity']?>" autocomplete="off" size="2" disabled>
+									
 								</div>
 							</td>
-							<td class="cart_total">
-								<p class="cart_total_price">$59</p>
+							<td class="cart_price">
+								<p><i class="fa fa-inr"></i><?=$cart->rent_per_day?></p>
 							</td>
-							<td class="cart_delete">
-								<a class="cart_quantity_delete" href=""><i class="fa fa-times"></i></a>
-							</td>
+							
+							
 						</tr>
-						<?php }?>
+						<?php $total=$total+$cart->rent_per_day*$vars[$i]['quantity']; }?>
 						<tr>
 							<td colspan="4">&nbsp;</td>
 							<td colspan="2">
 								<table class="table table-condensed total-result">
 									<tr>
 										<td>Cart Sub Total</td>
-										<td>$59</td>
+										<td><i class="fa fa-inr"></i><?=$total?></td>
 									</tr>
 									<tr>
-										<td>Exo Tax</td>
-										<td>$2</td>
+										<td>GST</td>
+										<td><?php $GST=$total*0.09;echo $GST;?></td>
 									</tr>
 									<tr class="shipping-cost">
-										<td>Shipping Cost</td>
-										<td>Free</td>										
+										<!-- <td>Shipping Cost</td>
+										<td>Free</td>			 -->							
 									</tr>
 									<tr>
 										<td>Total</td>
-										<td><span>$61</span></td>
+										<td><span><i class="fa fa-inr"></i><?=$total+$GST?></span></td>
 									</tr>
 								</table>
 							</td>
@@ -92,78 +95,33 @@ use yii\helpers\Url;
 				<div class="row">
 					<div class="col-sm-3">
 						<div class="shopper-info">
-							<p>Shopper Information</p>
-							<form>
-								<input type="text" placeholder="Display Name">
-								<input type="text" placeholder="User Name">
-								<input type="password" placeholder="Password">
-								<input type="password" placeholder="Confirm password">
+							
+							<form name="pickups" id="pickups" action="<?=Url::to(['/site/confirmtocheckout/'])?>" method="post" >
+							
+								
+								<select name="pickup_time">
+									<!-- <option selected="true" disabled="true">Select Pickup Time</option> -->
+									<option value="9am-12pm">9am-12pm</option>
+									<option value="12pm-3pm">12pm-3pm</option>
+									<option value="3pm-6pm">3pm-6pm</option>
+								</select>
 							</form>
-							<a class="btn btn-primary" href="">Get Quotes</a>
-							<?php if (empty($var)) { ?>
-								<a class="btn btn-primary" href="<?=Url::to(['/site/print'])?>" disabled>Confirm</a>
+							<br><br>
+							<?php if (empty($vars)) { ?>
+								<a class="btn btn-primary" href="#" disabled>Confirm</a>
 							
 							<?php } else {?>
-							<a class="btn btn-primary" href="<?=Url::to(['/site/print'])?>">Confirm</a>
+
+							<button type="submit" class="btn btn-primary" form="pickups">Confirm</button><br><br><br>
 							<?php }?>
+							
 						</div>
 					</div>
-					<div class="col-sm-5 clearfix">
-						<div class="bill-to">
-							<p>Bill To</p>
-							<div class="form-one">
-								<form>
-									<input type="text" placeholder="Company Name">
-									<input type="text" placeholder="Email*">
-									<input type="text" placeholder="Title">
-									<input type="text" placeholder="First Name *">
-									<input type="text" placeholder="Middle Name">
-									<input type="text" placeholder="Last Name *">
-									<input type="text" placeholder="Address 1 *">
-									<input type="text" placeholder="Address 2">
-								</form>
-							</div>
-							<div class="form-two">
-								<form>
-									<input type="text" placeholder="Zip / Postal Code *">
-									<select>
-										<option>-- Country --</option>
-										<option>United States</option>
-										<option>Bangladesh</option>
-										<option>UK</option>
-										<option>India</option>
-										<option>Pakistan</option>
-										<option>Ucrane</option>
-										<option>Canada</option>
-										<option>Dubai</option>
-									</select>
-									<select>
-										<option>-- State / Province / Region --</option>
-										<option>United States</option>
-										<option>Bangladesh</option>
-										<option>UK</option>
-										<option>India</option>
-										<option>Pakistan</option>
-										<option>Ucrane</option>
-										<option>Canada</option>
-										<option>Dubai</option>
-									</select>
-									<input type="password" placeholder="Confirm password">
-									<input type="text" placeholder="Phone *">
-									<input type="text" placeholder="Mobile Phone">
-									<input type="text" placeholder="Fax">
-								</form>
-							</div>
-						</div>
-					</div>
-					<div class="col-sm-4">
-						<div class="order-message">
-							<p>Shipping Order</p>
-							<textarea name="message"  placeholder="Notes about your order, Special Notes for Delivery" rows="16"></textarea>
-							<label><input type="checkbox"> Shipping to bill address</label>
-						</div>	
-					</div>					
+					
+									
 				</div>
 			</div>
+			<?php }?>
 		</div>
 	</section> <!--/#cart_items-->
+

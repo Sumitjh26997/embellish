@@ -40,34 +40,64 @@ use yii\controllers\UserController;
 	{
 		border-radius: 8px;
 	}
+
+	.but{
+		background:#331a00;
+		color: white;
+	}
 </style>
 	<section id="account">
-		<div class="container">
-			
-			
+		<div class="container">		
 
-			<div class="shopper-informations">
+			<div class="row">
+						<div class=" shopper-info" style="margin-left: 15px;">
+							<form action="" autocomplete="off">
+							<br><br>
+							<p>Name</p>
+							
+								<input type="text"  name="name" style="max-width: 300px;" onkeypress="return ValidateAlpha(event)" value="<?=$accountuserdetails->username?>" disabled/>
+							<br><br>
+							
+							<p>Address</p>
+								<textarea name="address" rows="5"  style="max-width: 300px;padding-left: 2px;padding-top: 2px;overflow: hidden;" disabled><?php echo $accountuserdetails->address; ?>									
+								</textarea>
+							
+<!-- 							<p>Address</p>
+								<input type="text" name="address" style="max-height:50px;" value="<?=$accountuserdetails->address?>" style="max-width: 300px;" disabled>
+																	
+								</input>
+ -->
+ 							<br><br>
+							
+							<p>Phone</p>	
+								<input type="tel" maxlength="10" minlength="10" onkeypress="return isNumberKey(event)" name="phone" value="<?=$accountuserdetails->phone?>" style="max-width: 300px;" disabled>
+							
+							<br><br>
+							
+								<!-- <button type="submit" class="btn btn-primary " href="" style="width: 300px;">Update</button> -->
+							<?= Html::a('Update', ['/user/update','id'=>$accountuser], ['class' => 'btn btn-default but']) ?>
+        		<?= Html::a('Delete', ['/user/delete','id'=>$accountuser], ['class' => 'btn btn-default but',
+		            'data' => [
+		                'confirm' => 'Are you sure you want to delete this item?',
+		                //'method' => 'post',
+		            ],
+		        ]) ?>
+							</form>
+							<br><br><br>
+							
+					</div>
+					
+				</div>
 				<!-- <a href="<?=Url::to("index.php?r=user%2Fupdate&id=$accountuser")?>">link-UPdate</a>
 				<a href="<?=Url::to("index.php?r=user%2Fdelete&id=$accountuser")?>">link-delete</a> -->
 
-				<?= Html::a('Update', ['/user/update','id'=>$accountuser], ['class' => 'btn btn-primary']) ?>
-        		<?= Html::a('Delete', ['delete', 'id' => $accountuser], [
-            		'class' => 'btn btn-danger',
-		            'data' => [
-		                'confirm' => 'Are you sure you want to delete this item?',
-		                'method' => 'post',
-		            ],
-		        ]) ?>
+				
 
 				
-			</div>
+			
 
 
 		</div>
 	</section> <!--/#cart_items-->
 
 	
-
-	
-
-

@@ -1,29 +1,66 @@
 <?php
 use yii\helpers\Url; 
 use yii\helpers\Html; 
+use backend\models\Item;
+
 $this->title = 'Cart';
+
+$cookie = isset($_COOKIE['start_date'.$cuser]) ? $_COOKIE['start_date'.$cuser] : "";
+        $cookie = stripslashes($cookie);
+        $cstart_date = json_decode($cookie, true);
+
+$cookie = isset($_COOKIE['end_date'.$cuser]) ? $_COOKIE['end_date'.$cuser] : "";
+        $cookie = stripslashes($cookie);
+        $cend_date = json_decode($cookie, true);
+       
+
 ?>
+<div class="shopper-informations" style="margin-left: 5%">
+				<div class="row">
+					<div class="col-sm-3">
+						<div class="shopper-info">
+							
+							<form style="display: inline;float: left;">
+										<label>Order Start Date</label> <input type="text" name="start_date" disabled="true" value="<?=$cstart_date?>">
+										<label>Order End Date</label> <input type="text" name="end_date" disabled="true" value="<?=$cend_date?>">
+							</form>
+						
+														
+						</div>
+					</div>
+					
+									
+				</div>
+			</div>
 <section id="cart_items">
 		<div class="container">
 			<h1>Cart</h1>
 			<?php
-							  if(empty($carts))
+							  if(empty($saved_cart_items))
         		 				{
         							echo Html::tag('p','Your Cart is Empty !',['class'=>'alert alert-danger']);
         							/*return $this->render('/site/cart.php',['var'=>var]);*/
         							echo Html::img('images/cart/emptycart.png',['class'=>'center-block']);
-            
-        						} else{?>
 
-			<div class="table-responsive cart_info">
+        							echo '<br>'.'<br>';
+            
+        						} else{
+if($message!='unset'&&$message!='')
+{
+	Yii::$app->getSession()->setFlash('danger',"$message");
+}
+?>
+
+
+			<div class="table-responsive cart_info" style="overflows: none;">
 				<table class="table table-condensed">
 					<thead>
-						<tr class="cart_menu">
+						<tr class="cart_menu" >
 							<td class="image">Item</td>
 							<td class="description"></td>
+							
+							<td class="quantity" align="center">Quantity</td>
 							<td class="price">Price</td>
-							<td class="quantity">Quantity</td>
-							<td class="total">Total</td>
 							<td></td>
 						</tr>
 					</thead>
@@ -38,33 +75,38 @@ $this->title = 'Cart';
      echo $names[$i];
      echo '</td></tr>';} -->
 
-						<?php foreach(array_keys($carts) as $i ) {
-							echo $carts[$i]->item_id ?>
+     				<!-- foreach(array_keys($carts) as $i)
+					{
+					    echo '<br>'.$i." ".$carts[$i]['quantity'].'<br>';
+					} -->	
+
+						<?php foreach(array_keys($saved_cart_items) as $i) {
+							/*echo $i;*/
+
+							$cart=Item::find()->where(['item_id'=>$i])->One();
+
+							?>
 						<tr>
 							<td class="cart_product">
-								<a href=""><img src="images/product-details/<?php echo $cartimages[$i]->image ?>" height="50px" width="100px" alt="photo" /></a>
+								<img src="images/product-details/<?php echo $cart['image']?>" height="60px" width="60px" alt="photo" />
 							</td>
-							<td class="cart_description">
-								<h4><a href=""><?=$carts[$i]->name?></a></h4>
-								<p>Web ID: <?=$carts[$i]->item_id?></p>
+							<td class="cart_description" style="padding-left: 6%">
+								<h4><?=$cart['name']?></h4>
+								<p>Web ID: <?=$cart['item_id']?></p>
+							</td>
+							
+							<td class="cart_quantity" align="center">
+								<?=$saved_cart_items[$i]['quantity']?> 
 							</td>
 							<td class="cart_price">
-								<p><?=$carts[$i]->rent_per_day?></p>
+								<p><i class="fa fa-inr"></i><?=$cart['rent_per_day']?></p>
 							</td>
-							<td class="cart_quantity">
-								<div class="cart_quantity_button">
-									<a class="cart_quantity_up" href=""> + </a>
-									<input class="cart_quantity_input" type="text" name="quantity" value=1 autocomplete="off" size="2">
-									<a class="cart_quantity_down" href=""> - </a>
-								</div>
-							</td>
-							<td class="cart_total">
-								<p class="cart_total_price">$59</p>
-							</td>
+							
 							<td class="cart_delete">
-						<a class="cart_quantity_delete" href="<?=Url::to(['/site/delitem','id'=>$carts[$i]->item_id])?>"><i class="fa fa-times"></i></a>
+						<a class="cart_quantity_delete" href="<?=Url::to(['/site/delitem','id'=>$i])?>"><i class="fa fa-times"></i></a>
 							</td>
 						</tr>
+
 						<?php }?>
 					</tbody>
 				</table>
@@ -74,7 +116,7 @@ $this->title = 'Cart';
 	<!-- </section> 
 
 	<section id="do_action"> -->
-		<div class="container">
+	<!-- 	<div class="container">
 			
 			<div class="row">
 				<div class="col-sm-6">
@@ -88,15 +130,17 @@ $this->title = 'Cart';
 							<li>Shipping Cost <span>Free</span></li>
 							<li>Total <span>$61</span></li>
 						</ul>
-							<!-- <a class="btn btn-default update" href="">Update</a> -->
-							<?php if (empty($carts)) { ?>
-							<a style="position:relative;left:20px;" class="btn btn-default check_out" href="<?=Url::to(['/site/checkout'])?>" disabled>Check Out</a>
-							<?php }else{?>
+							<a class="btn btn-default update" href="">Update</a>
+							
 							<a style="position:relative;left:20px;" class="btn btn-default check_out" href="<?=Url::to(['/site/checkout'])?>">Check Out</a>
-							<?php }?>
+							
 					</div>
 				</div>
 			</div>
+		</div> -->
+		<div class="container">
+		<a style="position:relative;left:20px;" class="btn btn-default check_out" href="<?=Url::to(['/site/checkout'])?>">Proceed to Check Out</a>
 		</div>
 		<?php }?>
+		<br><br><br>
 	</section><!--/#do_action-->

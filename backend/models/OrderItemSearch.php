@@ -8,7 +8,7 @@ use yii\data\ActiveDataProvider;
 use backend\models\OrderItem;
 
 /**
- * OrderItemSearch represents the model behind the search form about `\backend\models\OrderItem`.
+ * OrderItemSearch represents the model behind the search form of `\backend\models\OrderItem`.
  */
 class OrderItemSearch extends OrderItem
 {
@@ -18,7 +18,7 @@ class OrderItemSearch extends OrderItem
     public function rules()
     {
         return [
-            [['id', 'order_id', 'item_id', 'qty_per_item'], 'integer'],
+            [['id', 'order_id', 'item_id', 'qty_per_item', 'current_price'], 'integer'],
         ];
     }
 
@@ -46,7 +46,6 @@ class OrderItemSearch extends OrderItem
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'sort'=> ['defaultOrder' => ['order_id'=>SORT_DESC]],
         ]);
 
         $this->load($params);
@@ -63,6 +62,7 @@ class OrderItemSearch extends OrderItem
             'order_id' => $this->order_id,
             'item_id' => $this->item_id,
             'qty_per_item' => $this->qty_per_item,
+            'current_price' => $this->current_price,
         ]);
 
         return $dataProvider;

@@ -7,12 +7,12 @@ use Yii;
 /**
  * This is the model class for table "order_item".
  *
- * @property integer $id
- * @property integer $order_id
- * @property integer $item_id
- * @property integer $qty_per_item
+ * @property int $id
+ * @property int $order_id
+ * @property int $item_id
+ * @property int $qty_per_item
+ * @property int $current_price
  *
- * @property Orders $order
  * @property Item $item
  */
 class OrderItem extends \yii\db\ActiveRecord
@@ -31,8 +31,8 @@ class OrderItem extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['order_id', 'item_id', 'qty_per_item'], 'integer'],
-            [['order_id'], 'exist', 'skipOnError' => true, 'targetClass' => Orders::className(), 'targetAttribute' => ['order_id' => 'order_id']],
+            [['order_id', 'item_id', 'qty_per_item', 'current_price'], 'integer'],
+            [['current_price'], 'required'],
             [['item_id'], 'exist', 'skipOnError' => true, 'targetClass' => Item::className(), 'targetAttribute' => ['item_id' => 'item_id']],
         ];
     }
@@ -47,15 +47,8 @@ class OrderItem extends \yii\db\ActiveRecord
             'order_id' => 'Order ID',
             'item_id' => 'Item ID',
             'qty_per_item' => 'Qty Per Item',
+            'current_price' => 'Current Price',
         ];
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getOrder()
-    {
-        return $this->hasOne(Orders::className(), ['order_id' => 'order_id']);
     }
 
     /**

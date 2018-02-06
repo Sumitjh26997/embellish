@@ -28,7 +28,7 @@ use yii\helpers\Html;
     <meta name="publisher" content="www.embellish.store">
     <meta name="copyright" content="www.embellish.store">
     <meta name="revisit-after" content="2 days">
-    <link rel="shortcut icon" href="assets/img/fav.png">
+    <link rel="shortcut icon" href="E.png">
 
     <title>Embellish | Click It, Rent It, Prop It!</title>
     <!--[if lt IE 9]>
@@ -61,9 +61,9 @@ use yii\helpers\Html;
                     <div class="col-sm-6">
                         <div class="social-icons pull-right">
                             <ul class="nav navbar-nav">
-                                <li><a href="https://www.facebook.com/embellishprops/" target="_blank"><i class="fa fa-facebook"></i></a></li>
-                                <li><a href="https://twitter.com/embellishprops" target="_blank"><i class="fa fa-twitter"></i></a></li>
-                                <li><a href="https://www.instagram.com/embellishprops/" target="_blank"><i class="fa fa-instagram"></i></a></li>
+                                <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                                <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                                <li><a href="#"><i class="fa fa-instagram"></i></a></li>
                             </ul>
                         </div>
                     </div>
@@ -86,15 +86,15 @@ use yii\helpers\Html;
                                 
                                 
                                 <!-- <li><a href="<?=Url::to(['/site/checkout'])?>"><i class="fa fa-crosshairs"></i> Checkout</a></li> -->
-                                <li><a href="<?=Url::to(['/site/cart'])?>"><i class="fa fa-shopping-cart"></i> Cart</a></li>
+                                
                             <?php if (Yii::$app->user->isGuest) { ?>                                       
                                 <li><a href="<?=Url::to(['/site/login'])?>"><i class="fa fa-lock"></i> Login</a></li>
                                 <li><a href="<?=Url::to(['/site/signup'])?>"><i class="fa fa-lock"></i> Sign Up</a></li>
                                
                                  <?php } else{?>
 
-                                   
-
+                                    <li><a href="<?=Url::to(['/site/cart','message'=>'unset'])?>"><i class="fa fa-shopping-cart"></i> Cart</a></li>
+                                    <li><a href="<?=Url::to(['/site/order'])?>"><i class="fa fa-crosshairs"></i> Orders</a></li>
                                     <li><a href="<?=Url::to(['/site/account'])?>"><i class="fa fa-user"></i> Account</a></li>
                                     
                                     <?php      
@@ -130,10 +130,10 @@ use yii\helpers\Html;
                         </div>
                         <div class="mainmenu pull-left">
                              <ul class="nav navbar-nav collapse navbar-collapse">
-                                <li><a href="<?=Url::to(['/site'])?>" class="active">Home</a></li>
+                                <li><a href="<?=Url::to(['/site/index'])?>" class="active">Home</a></li>
                                 <li class="dropdown"><a href="#">Shop<i class="fa fa-angle-down"></i></a>
                                     <ul role="menu" class="sub-menu">
-                                        <li><a href="<?=Url::to(['/site/decor'])?>">Decor</a></li>
+                                        <li><a href="<?=Url::to(['/site/decor','id'=>'decor'])?>">Decor</a></li>
                                         <li><a href="#">Furniture</a></li> 
                                         <li><a href="#">Art</a></li> 
                                         <li><a href="#">Exclusives</a></li> 
@@ -146,7 +146,7 @@ use yii\helpers\Html;
                                     </ul>
                                 </li> 
                                 
-                                <li><a href="<?=Url::to(['/site/contactus'])?>">Contact</a></li>
+                                <li><a href="<?=Url::to(['/site/feedback'])?>">Feedback</a></li>
                             </ul>
 
                     </div>
