@@ -2,6 +2,15 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use backend\models\Item;
+
+$cookie = isset($_COOKIE['start_date'.$cuser]) ? $_COOKIE['start_date'.$cuser] : "";
+        $cookie = stripslashes($cookie);
+        $cstart_date = json_decode($cookie, true);
+
+$cookie = isset($_COOKIE['end_date'.$cuser]) ? $_COOKIE['end_date'.$cuser] : "";
+        $cookie = stripslashes($cookie);
+        $cend_date = json_decode($cookie, true);
+
 ?>
 <section id="cart_items">
 		<div class="container">
@@ -96,14 +105,20 @@ use backend\models\Item;
 					<div class="col-sm-3">
 						<div class="shopper-info">
 							
-							<form name="pickups" id="pickups" action="<?=Url::to(['/site/confirmtocheckout/'])?>" method="post" >
-							
-								
-								<select name="pickup_time">
-									<!-- <option selected="true" disabled="true">Select Pickup Time</option> -->
-									<option value="9am-12pm">9am-12pm</option>
-									<option value="12pm-3pm">12pm-3pm</option>
-									<option value="3pm-6pm">3pm-6pm</option>
+							<form name="pickups" id="pickups" action="<?=Url::to(['/site/confirmtocheckout/'])?>" method="post" onsubmit="return sub();" >
+								<?php
+								$date1 = str_replace('-', '/', $cstart_date);
+								$pick = date('Y-m-d',strtotime($date1 . "-1 days"));
+								?>
+								<h3><b>Pickup Time :</b></h3><br><br>
+								<select name="pickup_time" id="pickup_time">
+									<option selected="true" disabled="true" value="default">Select Pickup Time</option> 
+									<option value="<?=$pick?> 9am-12pm"><?=$pick?> 9am-12pm</option>
+									<option value="<?=$pick?> 12pm-3pm"><?=$pick?> 12pm-3pm</option>
+									<option value="<?=$pick?> 3pm-6pm"><?=$pick?> 3pm-6pm</option>
+									<option value="<?=$cstart_date?> 9am-12pm"><?=$cstart_date?> 9am-12pm</option>
+									<option value="<?=$cstart_date?> 12pm-3pm"><?=$cstart_date?> 12pm-3pm</option>
+									<option value="<?=$cstart_date?> 3pm-6pm"><?=$cstart_date?> 3pm-6pm</option>
 								</select>
 							</form>
 							<br><br>
@@ -125,3 +140,14 @@ use backend\models\Item;
 		</div>
 	</section> <!--/#cart_items-->
 
+<script type="text/javascript">
+	function sub()
+	{
+		if(document.getElementById('pickup_time').value=="default")
+		{
+			alert("Please Select a Pickup Time");
+			return false;
+		}
+		
+	}
+</script>

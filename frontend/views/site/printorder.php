@@ -98,20 +98,7 @@ return false;
 <br><br><br>
 			<div class="shopper-informations">
 				<div class="row">
-					<!-- <div class="col-sm-3">
-						<div class="shopper-info">
-							<p>Shopper Information</p>
-							<form>
-								Name :<input type="text" placeholder="" value="Dhoom Machale dhoom tenenene">
-								Mob No. :<input type="text" placeholder="" value="Dhoom Machale dhoom tenenene">
-								Company Name :<input type="text" placeholder="" value="Dhoom Machale dhoom tenenene">
-								Company Address :<textarea name="address" cols="20" rows="8" >Dhoom Machale dhoom tenenene</textarea>
-								
-							</form>
-							
-						</div>
-
-					</div> -->
+				
 					
 					<div class="col-sm-8 clearfix">
 						<div class="bill-to">
@@ -141,40 +128,25 @@ return false;
 								</td></tr>
 								<tr>
 								<td class="tdr">Company&nbsp;Name:&nbsp;&nbsp;&nbsp;</td><td><?=$accountuser->company?>
-								</td></tr>
+								</td>
+							</tr>
 								<tr>
 								<td class="tdr" style="vertical-align: top;">Company&nbsp;Address:&nbsp;&nbsp;&nbsp;</td><td><textarea rows="8" style="width:200px;padding: 0px;" disabled><?=$accountuser->address?></textarea>
 							</td></tr>
+							<tr>
+								<td class="tdr">Pickup&nbsp;Time:&nbsp;&nbsp;&nbsp;</td><td><?php echo $fetchorder->pickup_time;?></td>
+							</tr>
 							</table>
-						<br><br><br>
-								<table>
-								<tr style="font-weight: bolder;"><td class="tdr">Pickup Time:&nbsp;&nbsp;&nbsp;<?php echo $fetchorder->pickup_time;?></td><td></td></tr>&nbsp;&nbsp;&nbsp;
-								</table>
 							
 						</div>
 					</div>  
-		
-							
-							
-									
-									<!-- 
-									<input type="password" placeholder="Confirm password">
-									<input type="text" placeholder="Phone *">
-									<input type="text" placeholder="Mobile Phone">
-									<input type="text" placeholder="Fax"> -->
+	
 								
 							
 						</div>
 					</div>
-					<!-- <div class="col-sm-4">
-						<div class="order-message">
-							<p>Shipping Order</p>
-							<textarea name="message"  placeholder="Notes about your order, Special Notes for Delivery" rows="16"></textarea>
-							<label><input type="checkbox"> Shipping to bill address</label>
-						</div>	
-					</div>		 -->			
-				
-			
+							
+
 			<div class="review-payment">
 				<h2>Order Details</h2>
 			</div>
@@ -187,9 +159,9 @@ return false;
 								<thead >
 									<tr style="background: #1a0d00;color: white;">
 											<td class="image" ><?php echo ' Order-Id :'.$fetchorder->order_id;?></td>
-											<td class="description"></td>
-											<td class="price"></td>
-											<td class="quantity"></td>
+											<td class="description"><?php echo "Start Date: -".$fetchorder['order_start_date'] ;?></td>
+											<td class="price"><?php echo "End Date: -".$fetchorder['order_end_date'];?></td>
+											<td class="quantity"><!-- Pickup Time :<?php echo $fetchorder->pickup_time;?> --></td>
 											<td class="total"></td>
 											<td></td>
 
@@ -212,11 +184,12 @@ return false;
 
 									<tr>
 										<td class="cart_product">
-											<p><img src="images/product-details/<?php echo $itemdetails->image ?>" height="50px" width="50px" alt="photo" /></p>
-										</td>
-										<td class="cart_description" style="padding-left: 6%">
+											<!-- <p><img src="images/product-details/<?php echo $itemdetails->image ?>" height="50px" width="50px" alt="photo" /></p> -->
 											<h4><?=$itemdetails->name?></h4>
-											<p>Web ID: <?=$itemdetails->item_id?></p>
+										</td>
+										<td class="cart_description" style="padding-left: 6%;">
+											
+											
 										</td>
 										<td class="cart_price">
 											<h4><?=$item->current_price?></h4>
@@ -233,7 +206,7 @@ return false;
 									<?php $total=$total+$item->current_price*$item->qty_per_item;} ?>
 									
 									<tr>
-										<td colspan="4">&nbsp;</td>
+										
 										<td colspan="2">
 											<table class="table table-condensed total-result">
 												<tr>

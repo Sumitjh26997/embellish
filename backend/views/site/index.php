@@ -8,7 +8,7 @@ $this->title = 'Embellish Admin';
 
     <div class="jumbotron">
 
-    	<img src="logo.png" style="max-width: 100%">
+    	<img src="logo.png" style="width: 300px;height: 100px;">
     	<br><br>
 
      

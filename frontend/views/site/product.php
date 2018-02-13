@@ -46,7 +46,7 @@ someDate=new Date(document.getElementById("osd").value);
     top: 0;
     width: 100%; /* Full width */
     height: 100%; /* Full height */
-   overflow:visible;
+   overflow:hidden;
     background-color: rgb(0,0,0); /* Fallback color */
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
    
@@ -61,7 +61,7 @@ someDate=new Date(document.getElementById("osd").value);
     border: 1px solid #888;
     height: 80%;
     width: 80%;
-    overflow-y: none;
+    overflow-y: hidden;
   background-color:#ffffff;
   font-family: calibri;
   /*-webkit-transition: all 1.0s ease-in-out;
@@ -122,8 +122,8 @@ someDate=new Date(document.getElementById("osd").value);
 
 if(isset($_POST['osd']) && isset($_POST['oed']))
 {
-  $_SESSION['osd']=$_POST['osd'];
-  $_SESSION['oed']=$_POST['oed'];
+  //$_SESSION['osd']=$_POST['osd'];
+ // $_SESSION['oed']=$_POST['oed'];
 
   $cstart_date=$_POST['osd'];
   $cend_date=$_POST['oed'];
@@ -257,7 +257,7 @@ $array=json_decode(stripslashes($_COOKIE['start_date'.$cuser]),true);
 if( $cstart_date=="" || $cend_date=="")//if(!isset($_SESSION['osd']) 
 {
 ?>
-<div id="dating" class="modal" style="overflow-x: hidden;">
+<div id="dating" class="modal" style="overflow-x: hidden;display: block;">
 <div class="modal-content" style="overflow-x: hidden;">
     <span style="float:right;cursor:pointer;font-size: 3em;font-family: 'Roboto',sans-serif;" onclick="document.getElementById('dating').style.display='none'">&times;</span><br><br>
     <center><h2><u style="color:#331a00;padding-top: 3px; ">Select the Start & End Dates for Your Order</u></h2></center>
@@ -367,7 +367,7 @@ echo date('Y-m-d', strtotime($Date. ' + 27 days'));
             $left=$from_item['quantity']-$total_items;//+$toadd;
          //   echo '<br>';echo $left;
 
-                if($left==0)
+                if($left<=0)
                 {
                   $outofstock=1;
                   $todisplay=0;
@@ -396,7 +396,7 @@ $saved_cart_items = json_decode($cookie, true);
         }
         else
         {
-          print_r($saved_cart_items);
+         // print_r($saved_cart_items);
             if(array_key_exists($id,$saved_cart_items))
             {
               $rt=1;
@@ -412,10 +412,9 @@ $saved_cart_items = json_decode($cookie, true);
 
 
 
-<button class="btn btn-default product-details" onclick="document.getElementById('dating').style.display='block';" style="background:#331a00;color: white;">Change Order Dates</button>
 
-<div id="dating" class="modal" style="display: none"; style="overflow-x: hidden;">
-<div class="modal-content" style="overflow-x: hidden;">
+<div id="dating" class="modal" style="display: none"; style="overflow-y: hidden;overflow-x: hidden;">
+<div class="modal-content" style="overflow-x:hidden ;overflow-y: hidden;">
     <span style="float:right;cursor:pointer;font-size: 3em;font-family: 'Roboto',sans-serif;" onclick="document.getElementById('dating').style.display='none'">&times;</span><br><br>
     <center><h2><u style="color:#331a00;padding-top: 3px; ">Select the Start & End Dates for Your Order</u></h2></center>
 
@@ -456,8 +455,10 @@ echo date('Y-m-d', strtotime($Date. ' + 27 days'));
 
 
         <div class="container">
+          <button class="btn btn-default product-details" onclick="document.getElementById('dating').style.display='block';" style="background:#331a00;color: white;">Change Order Dates</button>
             <div class="row">
                
+
                 
                     <div class="product-details">
                         <div class="col-sm-7">
@@ -487,9 +488,11 @@ echo date('Y-m-d', strtotime($Date. ' + 27 days'));
                                 
 
                                 <h2><?=$item->name?></h2>
-                                <p>Item ID:<?=$item->item_id?></p>
-                                
-                                
+                                <br><br>
+                                <p><b>Description :</b>&nbsp;<?=$item->description?></p>
+                                <br><br>
+                                 <p><b>Dimensions (l x b x h) in inches:</b>&nbsp;<?php echo $item->length." x ".$item->breadth." x ".$item->height;?></p>
+                                <br><br>
                                 <span>
                                    <form action="<?=Url::to(['/site/cart','message'=>$message])?>" method="post" >
                                   <table align="center">

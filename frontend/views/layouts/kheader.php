@@ -15,12 +15,7 @@ use yii\helpers\Html;
 
       gtag('config', 'UA-111700045-1');
     </script>
-    <meta name="theme-color" content="#331a00">
-    <!-- Windows Phone -->
-    <meta name="msapplication-navbutton-color" content="#331a00">   
-    <!-- iOS Safari -->
-    <meta name="apple-mobile-web-app-status-bar-style" content="#331a00">
-    <meta name="">
+
     <meta charset="utf-8">
     <meta name="title" content="Embellish">
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
@@ -33,14 +28,14 @@ use yii\helpers\Html;
     <meta name="publisher" content="www.embellish.store">
     <meta name="copyright" content="www.embellish.store">
     <meta name="revisit-after" content="2 days">
-   
+    <link rel="shortcut icon" href="E.png">
 
     <title>Embellish | Click It, Rent It, Prop It!</title>
     <!--[if lt IE 9]>
     <script src="js/html5shiv.js"></script>
     <script src="js/respond.min.js"></script>
-    <![endif]-->   
-     <link rel="shortcut icon" href="E.png">    
+    <![endif]-->       
+    <link rel="shortcut icon" href="E.png">
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="images/ico/apple-touch-icon-144-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="images/ico/apple-touch-icon-114-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="images/ico/apple-touch-icon-72-precomposed.png">
@@ -55,7 +50,7 @@ use yii\helpers\Html;
                     <div class="col-sm-6">
                         <div class="contactinfo">
                             <ul class="nav nav-pills">
-                                <li><a href="tel:8446972394"><i class="fa fa-phone"></i> +91 8446972394</a></li>
+                                <li><a href=""><i class="fa fa-phone"></i> +2 95 01 88 821</a></li>
                                 <li><a href="mailto:kanchan@embellish.store"><i class="fa fa-envelope"></i> kanchan@embellish.store</a></li>
                                 <li><a href="">|</a></li>
 
@@ -66,9 +61,9 @@ use yii\helpers\Html;
                     <div class="col-sm-6">
                         <div class="social-icons pull-right">
                             <ul class="nav navbar-nav">
-                                <li><a href="https://www.facebook.com/embellishprops/" target="_blank"><i class="fa fa-facebook"></i></a></li>
-                                <li><a href="https://twitter.com/embellishprops" target="_blank"><i class="fa fa-twitter"></i></a></li>
-                                <li><a href="https://www.instagram.com/embellishprops/" target="_blank"><i class="fa fa-instagram"></i></a></li>
+                                <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                                <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                                <li><a href="#"><i class="fa fa-instagram"></i></a></li>
                             </ul>
                         </div>
                     </div>
@@ -90,6 +85,8 @@ use yii\helpers\Html;
                             <ul class="nav navbar-nav">
                                 
                                 
+                                <!-- <li><a href="<?=Url::to(['/site/checkout'])?>"><i class="fa fa-crosshairs"></i> Checkout</a></li> -->
+                                
                             <?php if (Yii::$app->user->isGuest) { ?>                                       
                                 <li><a href="<?=Url::to(['/site/login'])?>"><i class="fa fa-lock"></i> Login</a></li>
                                 <li><a href="<?=Url::to(['/site/signup'])?>"><i class="fa fa-lock"></i> Sign Up</a></li>
@@ -97,7 +94,7 @@ use yii\helpers\Html;
                                  <?php } else{?>
 
                                     <li><a href="<?=Url::to(['/site/cart','message'=>'unset'])?>"><i class="fa fa-shopping-cart"></i> Cart</a></li>
-                                    <li><a href="<?=Url::to(['/site/order'])?>"><i class="fa fa-gift"></i> Orders</a></li>
+                                    <li><a href="<?=Url::to(['/site/order'])?>"><i class="fa fa-crosshairs"></i> Orders</a></li>
                                     <li><a href="<?=Url::to(['/site/account'])?>"><i class="fa fa-user"></i> Account</a></li>
                                     
                                     <?php      
@@ -133,46 +130,33 @@ use yii\helpers\Html;
                         </div>
                         <div class="mainmenu pull-left">
                              <ul class="nav navbar-nav collapse navbar-collapse">
-                                <li><a href="<?=Url::to(['/'])?>" class="active">Home</a></li>
+                                <li><a href="<?=Url::to(['/site/index'])?>" class="active">Home</a></li>
                                 <li class="dropdown"><a href="#">Shop<i class="fa fa-angle-down"></i></a>
                                     <ul role="menu" class="sub-menu">
-                                        <li><a href="<?=Url::to(['/site/category','cat'=> 'Decor','color'=>'','material'=>''])?>">Decor</a></li>
-                                        <li><a href="#">Furniture</a></li> 
-                                        <li><a href="#">Art</a></li> 
-                                        <li><a href="#">Exclusives</a></li> 
+                                        <li><a href="<?=Url::to(['/site/category','cat'=>'decor'])?>">Decor</a></li>
+                                        <li><a href="<?=Url::to(['/site/category','cat'=>'furniture'])?>">Furniture</a></li> 
+                                        <li><a href="<?=Url::to(['/site/category','cat'=>'art'])?>">Art</a></li> 
+                                        <li><a href="<?=Url::to(['/site/category','cat'=>'exclusive'])?>">Exclusives</a></li> 
                                     </ul>
-                                </li>  
-                                <li><a href="<?=Url::to(['/site/contactus'])?>">Contact</a></li>
+                                </li> 
+                                <li class="dropdown"><a href="#">Blog<i class="fa fa-angle-down"></i></a>
+                                    <ul role="menu" class="sub-menu">
+                                        <li><a href="#">Blog List</a></li>
+                                        <li><a href="#">Blog Single</a></li>
+                                    </ul>
+                                </li> 
+                                
+                                <!-- <li><a href="<?=Url::to(['/site/feedback'])?>">Feedback</a></li> -->
                             </ul>
 
                     </div>
                     </div>
-                    <div class="col-sm-3" style="">
-                        <div class="search_box pull-right" style="z-index: 1">
-                            <input id="searchkey" type="text" placeholder="Search" onkeyup="search();" style="min-width: 300px;" />
-                            <div class="search_box" id="suggesstion-box" style="position:relative;cursor: pointer;z-index:1;padding-left: -40px;"></div>
+                    <!-- <div class="col-sm-3">
+                        <div class="search_box pull-right">
+                            <input type="text" placeholder="Search"/>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div><!--/header-bottom-->
     </header><!--/header-->
-<script type="text/javascript" src="js/jquery.js"></script>
-<script type="text/javascript">
-    function search(){
-        if($('#searchkey').val()!="")
-        {
-        $.get( '<?= Url::toRoute('site/search')?>',{'keyword':$('#searchkey').val()})
-        .done(function(data){
-            $('#suggesstion-box').html(data);
-        }) 
-        .fail(function() {
-        alert( "error" );
-        });
-        }
-        else
-        {
-            $('#suggesstion-box').html("");
-        }
-    }
-</script>

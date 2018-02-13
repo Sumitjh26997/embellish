@@ -30,7 +30,7 @@
                         'visible' => Yii::$app->user->identity->username == 'root-kanchan' || Yii::$app->user->identity->username == 'root-sneha'|| Yii::$app->user->identity->username == 'root-super',
                         'items' => [
                             ['label' => 'Active employees', 'icon' => 'circle-o', 'url' => ['/admin/index'],],
-                            ['label' => 'Deleted employees', 'icon' => 'circle-o', 'url' => ['/image/index'],],
+                            ['label' => 'Deleted employees', 'icon' => 'circle-o', 'url' => ['/delete-admin/index'],],
                         ],
                     ],
                     [

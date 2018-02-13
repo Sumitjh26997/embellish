@@ -12,7 +12,7 @@ use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
-use backend\models\Item;
+use backend\models\Items;
 use yii\data\ActiveDataProvider;
 /*use backend\models\User;*/
 use frontend\models\User;
@@ -85,13 +85,48 @@ class SiteController extends Controller
         ];
     }
 
-    public function actionCategory($cat)
+   public function actionCategory($cat,array $color,array $material)
     {
-        $category = Item::find()->where(['type'=>$cat])->all();
-        //$categoryimages = Image::find()->where(['in','item_id',$category])->distinct()->all();
+        if($color[0]=="none" && $material[0]=="none")
+        {
+            //echo "all";
+            $category = Items::find()->where(['type'=>$cat])->all();
+        }
+        else if($color[0]!="none" && $material[0]=="none")
+        {
+            //echo "color";
+            $category = Items::find()->where(['type'=>$cat])->andWhere(['in','color',$color])->all();   
+        }
+        else if($color[0]=="none" && $material[0]!="none")
+        {
+            //echo "material";
+            $category = Items::find()->where(['type'=>$cat])->andWhere(['in','material',$material])->all();   
+        }
+        else
+        {
+            //echo "both";
+            $category = Items::find()->where(['type'=>$cat])->andWhere(['in','color',$color])->orWhere(['in','material',$material])->all();   
+        }
+        //print_r($category);
+        $categoryimages = Image::find()->where(['in','item_id',$category])->distinct()->all();
+        $colors = Items::find()->select(['color'])->where(['type'=>$cat])->distinct()->all();
+        $materials = Items::find()->select(['material'])->where(['type'=>$cat])->distinct()->all();
 
-        return $this->render('category',['cat' => $cat,'category'=>$category]);
+        return $this->render('category',['cat' => $cat,'category'=>$category,'categoryimages' => $categoryimages,'color'=>$colors,'material'=>$materials,'colorcheck'=>$color,'materialcheck'=>$material]);
     }
+
+    public function actionSearch($keyword)
+    {
+       $search = Items::find()->orWhere(['like','name',$keyword])->orWhere(['like','color',$keyword])->orWhere(['like','material',$keyword])->orWhere(['like','description',$keyword])->limit(6)->all();
+       return $this->renderPartial('search',['result'=>$search]);
+    }
+
+    /**
+     * Displays homepage.
+     *
+     * @return mixed
+     */
+ 
 
     /**
      * Displays homepage.
@@ -100,13 +135,15 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $items = Item::find()->where(['featured'=>'Yes'])->all();
+        $items = Items::find()->where(['featured'=>'Yes'])->all();
+        $categories = Items::find()->select(['type'])->distinct()->all();
       
        /* $items=new ActiveDataProvider (['query'=>Item::find()->where(['featured'=>'Yes']),
             'pagination'=>['pageSize'=>3],
 
         ]);*/
-        return $this->render('index',['items'=>$items]);
+
+        return $this->render('index',['items'=>$items,'categories'=>$categories]);
     }
 
     /**
@@ -116,114 +153,14 @@ class SiteController extends Controller
      */
     public function actionCart($message)
     {
-        /* if (Yii::$app->user->isGuest) 
-            { 
-                return $this->redirect(['/site/login']);
-            }*/
-
-
-        $session=Yii::$app->session;
-        //Yii::$app->user->logout(false);
-        //echo $_POST['iid']." ";
-        //$session['cart']='';
-        //Yii::$app->db->autocommit=false;
-        //$pid = $session['cart'];
-
-
-/*
-        if(isset($_POST['iid'])  && (empty($pid) || !in_array($_POST['iid'],$pid) ))
-        {
-            $connection = new \yii\db\Connection([
-            'dsn' => 'mysql:host=localhost;dbname=embellish_props',
-            'username' => 'root',
-            'password' => '12345',
-                ]);
-
-            $connection->open();
-            
-
-            $itemtofetch = $_POST['iid'];
-            $itemqtydemand=$_POST['qty'];
-           
-            try {
-
-            $transaction=Yii::$app->db->beginTransaction();
-            $sql = "select * from item where item_id=$itemtofetch";
-            
-            $checkitem=Item::findBySql($sql)->One();
-            $number=$checkitem->qty_left;  
-
-            if($checkitem->qty_left < $itemqtydemand or $itemqtydemand > $checkitem->qty_on_order)
-                throw new Exception('cannot proceed');
-
-            else
-            {
-                $number=$number-1;
-            
-
-                $command = $connection->createCommand("Update item set qty_left=$number where item_id=$itemtofetch");
-                $command->execute();
-            
-                $pid[]=$_POST['iid'];
-                $session['cart']=$pid;
-                //print_r($session['cart']);
-                $transaction->commit();
-            }
-
-           
-
-        } catch (Exception $e) {
-            $transaction->rollBack();
-           echo Html::tag('p',$e->getMessage()."!",['class'=>'container alert alert-danger']);
-            echo $e->getMessage();
-        }
-    
- 
-
-
-
-
-      }*/
-     /* else{
-        echo 'already present';
-         print_r($session['cart']);
-      }*/
-      /*print_r($session['cart']);
-        $carts = Item::find()->where(['item_id'=>$session['cart']])->all();*/
-
-
-       /* 
-        foreach (array_keys($session['cart']) as $i) {
-            echo $i.'=>'.$session['cart'][$i].'<br>';
-        }
-                    print_r($session['cart']);
        
- */
-      //print_r($session['cart']);
-
-       
-        //$cartimages=findBySql($sql)->all();
-        /*foreach($cartandimage as $cart)
-        echo $cart->.'<br>';
-        echo '<br>';
-
-        foreach(array_keys($cartandimage) as $i)
-        {
-
-            echo $cartandimage[$i]->item_id.' '.'<br>';
-        }*/
-        
-      
-        // $cartimages = Image::find()->where(['in','item_id',$carts])->distinct()->all();
-
-        //return $this->render('cart',['carts'=>$carts]);//,'cartimages'=>$cartimages]);
     $cuser= Yii::$app->user->getId();
 $cookie = isset($_COOKIE['cart_items_cookie'.$cuser]) ? $_COOKIE['cart_items_cookie'.$cuser] : "";
     $cookie = stripslashes($cookie);
     $saved_cart_items = json_decode($cookie, true);
 
     
-    echo 'cart_items_cookie'."$cuser".'<br>';
+    //echo 'cart_items_cookie'."$cuser".'<br>';
  
     // if $saved_cart_items is null, prevent null error
     if(!$saved_cart_items)
@@ -253,17 +190,17 @@ $cookie = isset($_COOKIE['cart_items_cookie'.$cuser]) ? $_COOKIE['cart_items_coo
         }
 
 
-        echo "new : ";
+      /*  echo "new : ";
         print_r($cart_items);
-        echo "<br>";
+        echo "<br>";*/
 
         $json = json_encode($cart_items, true);
         setcookie("cart_items_cookie"."$cuser", $json, time() + (86400), '/'); // 86400 = 1 day
         $_COOKIE['cart_items_cookie'.$cuser]=$json;
 
-        echo $json.'<br>';
+      //  echo $json.'<br>';
         $saved_cart_items=json_decode(stripslashes($_COOKIE['cart_items_cookie'.$cuser]),true);
-        print_r($saved_cart_items);
+      //  print_r($saved_cart_items);
 
 
     }
@@ -288,22 +225,8 @@ $cookie = isset($_COOKIE['cart_items_cookie'.$cuser]) ? $_COOKIE['cart_items_coo
 
 else
 { 
-    print_r($saved_cart_items); 
-    //echo '<br>'.$saved_cart_items[9]['quantity'];//going directly from carts tab
-    //echo '<br>$carts=';
-    //print_r($carts);
+  //  print_r($saved_cart_items); 
 
-    /*$cartitemsascookie=$_COOKIE['cart_items_cookie'.$cuser];
-        $cartitemsascookie=stripslashes($cartitemsascookie);
-        $carts = json_decode($cartitemsascookie, true);
-
-//print_r($carts);
-
-foreach(array_keys($carts) as $i)
-{
-    echo '<br>'.$i." ".$carts[$i]['quantity'].'<br>';
-}
-*/
 } 
 
 
@@ -313,21 +236,10 @@ return $this->render('cart',['saved_cart_items'=>$saved_cart_items,'message'=>$m
 
  public function actionProduct($id)
     {
-        $item = Item::findOne($id);
+        $item = Items::findOne($id);
         $itemimages=Image::find()->where(['item_id'=>$id])->all();
         $cuser= Yii::$app->user->getId();  
 
-    if(!Yii::$app->user->isGuest && isset($_SESSION['osd']))
-    {
-        $cookie = isset($_COOKIE['start_date'.$cuser]) ? $_COOKIE['start_date'.$cuser] : "";
-        $cookie = stripslashes($cookie);
-        $cstart_date = json_decode($cookie, true);
-
-        $json = json_encode($_SESSION['osd'], true);
-        setcookie("start_date"."$cuser", $json, time() + (86400), '/'); // 86400 = 1 day
-        $_COOKIE['start_date'.$cuser]=$json;
-        return $this->render('product',['item'=>$item,'id'=>$id,'itemimages'=>$itemimages,'cuser'=>$cuser]);
-    }
 
     return $this->render('product',['item'=>$item,'id'=>$id,'itemimages'=>$itemimages,'cuser'=>$cuser]);
 
@@ -394,7 +306,7 @@ public function actionFeedback($order_id)
        {
 
          $vars=json_decode(stripslashes($_COOKIE['cart_items_cookie'.$cuser]),true);
-         return $this->render('checkout',['vars'=>$vars]);//'cartimages'=>$cartimages]);
+         return $this->render('checkout',['vars'=>$vars,'cuser'=>$cuser]);//'cartimages'=>$cartimages]);
        }
         
         return $this->redirect(['/site/cart']);
@@ -464,15 +376,7 @@ public function actionFeedback($order_id)
         
         echo "count=".count($checkoutitems)."<br>";
       //  echo "print=".print_r($checkoutitems)."<br>";
-         /*foreach ($var as $key => $value) {
-            # code...
-            //echo $value;
-        }*/
-       /* $orderitems = Item::find()->where(['item_id'=>array_keys($checkoutitems)])->all();
-        echo "u wanted this";
-        foreach ($orderitems as $key => $value) {
-            echo $key."==".$value['quantity'].'<br>';
-        }*/
+    
        // print_r($orderitems);
 
 
@@ -488,8 +392,7 @@ public function actionFeedback($order_id)
 
         
 
-        $transaction=Yii::$app->db->beginTransaction();
-
+        $transaction=$connection->beginTransaction();
         try {
 
             $command1= $connection->createCommand()->insert('orders',['user_id'=>$cuser,'order_end_date'=>$end_date,'order_start_date'=>$start_date,'return_date'=>$return_date,'pickup_time'=>$pickup])->execute();
@@ -499,7 +402,7 @@ public function actionFeedback($order_id)
         foreach (array_keys($checkoutitems) as $i) {
             $total_items=0;
         
-            $from_item = Item::find()->where(['item_id'=>$i])->one();
+            $from_item = Items::find()->where(['item_id'=>$i])->one();
 
             $from_orderitems = OrderItem::find()->where(['item_id'=>$i])->all();
 
@@ -526,7 +429,7 @@ public function actionFeedback($order_id)
              
             }
 
-            echo '<br>'."above sum for item_id".$i."---".$total_items."in store=".$from_item->quantity.'<br>';
+           // echo '<br>'."above sum for item_id".$i."---".$total_items."in store=".$from_item->quantity.'<br>';
 
             $star=$from_item->quantity-$total_items;
          //   echo "current availability";
@@ -537,12 +440,7 @@ public function actionFeedback($order_id)
             if($star<=0 || $star< $checkoutitems[$i]['quantity'] )
             {
 
-               // $nice[]=$i;
-                //echo "iteration".$i;
-               // $fetch=Orders::find()->where(['order_id'=>$fetchrecentorder['order_id']])->one();
-                
-               // if($fetch->delete())
-                    throw new Exception("$from_item->name is not available with required quantity");
+                    throw new Exception("$from_item->name is not available in specified quantity");
             }
                 
                 else {
@@ -553,80 +451,62 @@ public function actionFeedback($order_id)
                         'item_id'=>$i,
                         'current_price'=>$from_item->rent_per_day,
                         'qty_per_item'=>$checkoutitems[$i]['quantity']
-                        
                         ])->execute();
-
-                /*$array=json_decode(stripslashes($_COOKIE['cart_items_cookie'.$cuser]),true);
-                $array = array_diff_key($array,[$i=>array()]);
-                $json = json_encode($array, true);
-                setcookie("cart_items_cookie"."$cuser", $json, time() + (86400), '/'); // 86400 = 1 day
-                $_COOKIE['cart_items_cookie'.$cuser]=$json;*/
-                $whetherorder=1;
 
                 $cart_amount=$cart_amount+$from_item->rent_per_day*$checkoutitems[$i]['quantity'];
             }
-            /*}*/
-           
-           
               
          }
+        
+          $cart_amount=$cart_amount+0.09*$cart_amount;
+          $nom=$fetchrecentorder['order_id'];
 
-         $fetch=Orders::find()->where(['order_id'=>$fetchrecentorder['order_id']])->one();
-          //echo "<br>".$fetchrecentorder['order_id']."<br>";
-          //print_r($fetch);
-
-          $fetch->cart_amt = $cart_amount;
-
-          $test=$fetch->save();
-         
-         // echo "fetchorder".$fetchrecentorder['order_id'];
- /*$tomakeorder=OrderItem::find()->where(['order_id'=>$fetchrecentorder['order_id']])->one();
-            if(empty($tomakeorder))
-            {
-                throw new Exception("Error");
-                
-            }*/
-          
+          $check=$connection->createCommand("update orders set cart_amt = $cart_amount
+                where order_id = $nom and user_id=$cuser")->execute();
+    
+          if(!$check)            
+            throw new Exception("enable to process");
 
             $transaction->commit();
-        //}
-         // $fetch= $connection->createCommand("select * from  orders where user_id=$cuser and order_id= $fetchrecentorder['order_id'] order by order_id DESC limit 1 ");->execute();
-          
-         // echo "fetchorder".$fetchrecentorder;
-         /* echo '<br>$nice===';
-          print_r($nice);*/
-}
-         /* $tomakeorder=OrderItem::find()->where(['order_id'=>$fetchrecentorder])->all();*/
 
-            catch(Exception $e)
-            {
-               //echo "<br>we are done<br>";
-                $transaction->rollBack();
-                //echo "fetchorder".$fetchrecentorder['order_id'];
-               // print_r($tomakeorder);
-                // $transaction->rollBack();
-           echo Html::tag('p',$e->getMessage()."!",['class'=>'container alert alert-danger']);
-           
-           //$transaction2=Yii::$app->db->beginTransaction();*/
-           $fetch=Orders::find()->where(['order_id'=>$fetchrecentorder['order_id']])->one();
-           $fetch->delete();
+        $array=array();
+        $json = json_encode($array, true);
+        setcookie("cart_items_cookie"."$cuser", $json, time() + (86400), '/'); // 86400 = 1 day
+        $_COOKIE['cart_items_cookie'.$cuser]=$json;
 
-           /*$transaction2->commit();*/
-            return $this->redirect(['/site/cart','message'=>$e->getMessage()]);
-                
+        $start_date="";
+        $end_date="";
+       $json = json_encode($start_date, true);
+      setcookie("start_date"."$cuser", $json, time() + (86400), '/'); // 86400 = 1 day
+      $_COOKIE['start_date'.$cuser]=$json;
+
+      $json = json_encode($end_date, true);
+      setcookie("end_date"."$cuser", $json, time() + (86400), '/'); // 86400 = 1 day
+      $_COOKIE['end_date'.$cuser]=$json;
+
+        
         }
+        catch(Exception $e)
+        {
+               //echo "<br>we are done<br>";
+            /*$array=$checkoutitems ;
+            $json = json_encode($array, true);
+            setcookie("cart_items_cookie"."$cuser", $json, time() + (86400), '/'); // 86400 = 1 day
+            $_COOKIE['cart_items_cookie'.$cuser]=$json;*/
+         
+               $transaction->rollBack();
+               echo Html::tag('p',$e->getMessage()."!",['class'=>'container alert alert-danger']);
+               return $this->redirect(['/site/cart','message'=>$e->getMessage()]);
+                
+            }
           
-          //$fetch->cart_amt=$cart_amount;
-          //$fetch->save();
-
         return $this->redirect(['/site/printorder']);
-       
     }
 
 
     public function actionDecor($id)
     {
-        $decors = Item::find()->where(['type'=>$id])->all();
+        $decors = Items::find()->where(['type'=>$id])->all();
     
         return $this->render('decor',['id'=>$id,'decors'=>$decors]);
 
@@ -707,11 +587,7 @@ public function actionFeedback($order_id)
         $fetchorder=Orders::find()->where(['user_id'=>$cuser])->orderBy(['order_id'=>SORT_DESC])
         ->one();
         
-       // echo $fetchorder->order_id;
-      /*  $session=Yii::$app->session;
-        $session->open();
-        
-        $var=$session['cart'];  */     
+       
         
         $f=$fetchorder['order_id'];
         
@@ -725,38 +601,11 @@ public function actionFeedback($order_id)
     public function actionOrder()
     {
         $cuser= Yii::$app->user->getId();
-        echo 'user-id'.$cuser.'<br>';
+        //echo 'user-id'.$cuser.'<br>';
         $fetchorder=Orders::find()->where(['user_id'=>$cuser])->all();
-        /*foreach($fetchorder as $order)
-        /*print_r($order);*/
-        
-        /*foreach($fetchorder as $order)
-        {
-            echo ' order-id :'.$order->order_id.'<br>';
-            $orderitems=OrderItem::find()->where(['order_id'=>$order->order_id])->all();
-                foreach($orderitems as $orderitem)
-                {
-                    echo 'item_id : '.$orderitem->item_id.'<br>';
-                }
-                echo '<br>';
-        } */
 
-        $session=Yii::$app->session;
-        $session->open();
-        /*if($session->isActive)
-        {
-            echo 'hello';
-        } */
-        /*print_r($session['cart']);*/ //displaying array
-        $var=$session['cart'];//displaying array
         $fetchpreviousorder=DeleteOrdersLog::find()->where(['user_id'=>$cuser])->all();
         
-        //echo count($var);
-         
-        //$var = Item::find()->where(['item_id'=>$var])->all();
-        //$carts = Item::find()->where(['item_id'=>$session['cart']])->all();
-        //$cartimages = Image::find()->where(['item_id'=>$session['cart']])->distinct()->all();
-
         return $this->render('order',['fetchorder'=>$fetchorder,'fetchpreviousorder'=>$fetchpreviousorder]);
         
     }
